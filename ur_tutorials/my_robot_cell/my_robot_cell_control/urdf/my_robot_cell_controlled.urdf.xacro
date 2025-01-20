@@ -24,6 +24,7 @@
   <xacro:arg name="mock_sensor_commands" default="false" /> -->
   <xacro:arg name="use_fake_hardware" default="false" />
   <xacro:arg name="fake_sensor_commands" default="false" />
+  <xacro:arg name="hash_kinematics" default="calib_4890363623803256388" />
 
   <link name="world" />
 
@@ -50,6 +51,7 @@
     use_fake_hardware="$(arg use_fake_hardware)"
     fake_sensor_commands="$(arg fake_sensor_commands)"
     headless_mode="$(arg headless_mode)"
+    hash_kinematics="$(arg hash_kinematics)"
   />
   <!--removed kinematics_params="$(arg kinematics_params_file)" from ur_ros2_control handover parameters-->
 
