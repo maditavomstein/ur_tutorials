@@ -1,0 +1,18 @@
+trajectory:
+  joint_names:
+    - ur20_shoulder_pan_joint
+    - ur20_shoulder_lift_joint
+    - ur20_elbow_joint
+    - ur20_wrist_1_joint
+    - ur20_wrist_2_joint
+    - ur20_wrist_3_joint
+  points:
+    - positions: [0.0, -1.57, 1.57, 0.0, 0.0, 0.0]
+      time_from_start:
+        sec: 3
+        nanosec: 0
+    - positions: [0.0, -1.0, 1.0, 0.5, 0.0, 0.0]
+      time_from_start:
+        sec: 6
+        nanosec: 0
+
