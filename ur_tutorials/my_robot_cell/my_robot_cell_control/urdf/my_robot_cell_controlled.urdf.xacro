@@ -3,12 +3,10 @@
 
   <!--First, include the macro from our custom description-->
   <xacro:include filename="$(find my_robot_cell_description)/urdf/my_robot_cell_macro.xacro"/>
-  <!--The !driver![ur_description for humble by apt]  already provides a control tag for the UR arm, we can directly include -->
-  <!-- <xacro:include filename="$(find ur_robot_driver)/urdf/ur.ros2_control.xacro"/>-->
+  <!--The ur_description package already provides a control tag for the UR arm, we can directly include -->
   <xacro:include filename="$(find ur_description)/urdf/ur.ros2_control.xacro"/>
 
   <!--We need to specify the arguments used for parametrizing our description-->
-  <!--Changed path from ur_description to my_robot_cell_control since .yaml needed there for ur_control.launch.py anyway-->
   <xacro:arg name="ur_type" default="ur20"/>
   <xacro:arg name="joint_limit_params" default="$(find my_robot_cell_control)/config/$(arg ur_type)/joint_limits.yaml"/>
   <xacro:arg name="kinematics_params_file" default="$(find my_robot_cell_control)/config/$(arg ur_type)/default_kinematics.yaml"/>
@@ -20,10 +18,9 @@
   <xacro:arg name="ur_script_filename" default="$(find ur_client_library)/resources/external_control.urscript"/>
   <xacro:arg name="ur_output_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_output_recipe.txt"/>
   <xacro:arg name="ur_input_recipe_filename" default="$(find ur_robot_driver)/resources/rtde_input_recipe.txt"/>
-  <!-- <xacro:arg name="use_mock_hardware" default="false" />
-  <xacro:arg name="mock_sensor_commands" default="false" /> -->
   <xacro:arg name="use_fake_hardware" default="false" />
   <xacro:arg name="fake_sensor_commands" default="false" />
+  <!--find hash_kinematics in calibration yaml-->
   <xacro:arg name="hash_kinematics" default="calib_4890363623803256388" />
 
   <link name="world" />
@@ -41,6 +38,7 @@
   </xacro:my_robot_cell>
 
   <!--Create the control tag for the UR robot-->
+  <!-- Add sim_gazebo, sim_ignition (both default false) or initial_positions if needed -->
   <xacro:ur_ros2_control
     name="$(arg ur_type)"
     tf_prefix="$(arg ur_type)_"
@@ -53,8 +51,7 @@
     headless_mode="$(arg headless_mode)"
     hash_kinematics="$(arg hash_kinematics)"
   />
-  <!--removed kinematics_params="$(arg kinematics_params_file)" from ur_ros2_control handover parameters-->
-
+  
   <!--If you had more controlled devices in your description, e.g. a gripper, you can add another ros2_control tag here-->
 
 </robot>

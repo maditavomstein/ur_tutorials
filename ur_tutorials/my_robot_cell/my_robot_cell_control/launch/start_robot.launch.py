@@ -1,20 +1,11 @@
-#from launch_ros.actions import Node
-#from launch_ros.parameter_descriptions import ParameterFile
-#ParameterFile unused, remove? / ParameterValue also not needed?
 from launch_ros.substitutions import FindPackageShare
-
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription
-#OpaqueFunction for userdefined python logic within the launch file - not needed
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-#from launch.conditions import IfCondition
 from launch.substitutions import (
-#    Command,
-#    FindExecutable,
-    LaunchConfiguration, #This substitution retrieves the value of a launch configuration parameter.
-    PathJoinSubstitution, #This substitution joins multiple path components into a single path.
+    LaunchConfiguration,
+    PathJoinSubstitution,
 )
-#removed TextSubstitution since not available in Humble and not even used in this script?
 
 
 def generate_launch_description():
@@ -48,8 +39,6 @@ def generate_launch_description():
     declared_arguments.append(
         DeclareLaunchArgument("launch_rviz", default_value="true", description="Launch RViz?")
     )
-
-    ################################################################
     declared_arguments.append(
         DeclareLaunchArgument(
             "use_fake_hardware",
@@ -126,6 +115,13 @@ def generate_launch_description():
             description="Activate loaded joint controller.",
         )
     )
+    declared_arguments.append(
+        DeclareLaunchArgument(
+            "headless_mode",
+            default_value="false",
+            description="Enable headless mode for robot control",
+        )
+    )
 
     #Initialize Arguments
     ur_type = LaunchConfiguration("ur_type")
@@ -140,6 +136,7 @@ def generate_launch_description():
     kinematics_params_file = LaunchConfiguration("kinematics_params_file")
     initial_joint_controller = LaunchConfiguration("initial_joint_controller")
     activate_joint_controller = LaunchConfiguration("activate_joint_controller")
+    headless_mode = LaunchConfiguration("headless_mode")
     
 
     base_launch = IncludeLaunchDescription(
@@ -158,47 +155,8 @@ def generate_launch_description():
             "kinematics_params_file": kinematics_params_file,
             "initial_joint_controller": initial_joint_controller,
             "activate_joint_controller": activate_joint_controller,
+            "headless_mode": headless_mode,
         }.items(),
     )
 
     return LaunchDescription(declared_arguments + [base_launch])
-    
-
-
-    # return LaunchDescription(
-    #     declared_arguments
-    #     + [
-    #         IncludeLaunchDescription(
-    #             PythonLaunchDescriptionSource(
-    #                 [
-    #                     PathJoinSubstitution(
-    #                         [
-    #                             FindPackageShare("ur_robot_driver"),
-    #                             "launch",
-    #                             "ur_control.launch.py",
-    #                         ]
-    #                     )
-    #                 ]
-    #             ),
-    #             launch_arguments={
-    #                 "ur_type": ur_type,
-    #                 "robot_ip": robot_ip,
-    #                 "tf_prefix": [LaunchConfiguration("ur_type"), "_"],
-    #                 "runtime_config_package": "my_robot_cell_control",
-    #                 "controllers_file": "ros2_controllers.yaml",
-    #                 "description_package": "my_robot_cell_control",
-    #                 "description_file": "my_robot_cell_controlled.urdf.xacro",
-    #                 "kinematics_params_file": PathJoinSubstitution(
-    #                     [
-    #                         FindPackageShare("my_robot_cell_control"),
-    #                         "config",
-    #                         "my_robot_calibration.yaml",
-    #                     ]
-    #                 ),
-    #                 "launch_rviz": launch_rviz,
-    #                 "use_fake_hardware": use_fake_hardware,
-    #                 "fake_sensor_commands": fake_sensor_commands,
-    #             }.items(),
-    #         ),
-    #     ]
-    # )
