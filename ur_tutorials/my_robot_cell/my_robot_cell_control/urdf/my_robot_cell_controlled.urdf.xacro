@@ -7,6 +7,8 @@
   <xacro:include filename="$(find ur_description)/urdf/ur.ros2_control.xacro"/>
 
   <!--We need to specify the arguments used for parametrizing our description-->
+  <!--Create a folder for wanted ur_type and copy those files from ur_description package in there; copied only ur20 files -->
+  <!--You could aswell point to ur_description but this way you make sure you use the same files as start_robot.launch.py which searches in runtime_config_package for joint_limits.yaml, physical_parameters.yaml, visual_parameters.yaml and in description_package for default_kinematics.yaml (last one can be overwritten)-->
   <xacro:arg name="ur_type" default="ur20"/>
   <xacro:arg name="joint_limit_params" default="$(find my_robot_cell_control)/config/$(arg ur_type)/joint_limits.yaml"/>
   <xacro:arg name="kinematics_params_file" default="$(find my_robot_cell_control)/config/$(arg ur_type)/default_kinematics.yaml"/>
@@ -38,7 +40,6 @@
   </xacro:my_robot_cell>
 
   <!--Create the control tag for the UR robot-->
-  <!-- Add sim_gazebo, sim_ignition (both default false) or initial_positions if needed -->
   <xacro:ur_ros2_control
     name="$(arg ur_type)"
     tf_prefix="$(arg ur_type)_"
