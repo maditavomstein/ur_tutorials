@@ -3,8 +3,6 @@ project(my_robot_cell_control)
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-#find_package(controller_manager REQUIRED) brauche ich das vllt?
-#find_package(robot_state_publisher REQUIRED) brauche ich das vllt?
 
 
 install(
